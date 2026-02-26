@@ -17,7 +17,6 @@ module alu (
 );
 
     always_comb begin
-        // TODO: Implement ALU operations based on alu_control signal
         // alu_control encoding:
         // 0000: ADD
         // 0001: SUB
@@ -32,14 +31,20 @@ module alu (
 
         case (alu_control)
             4'b0000: result = a + b;              // ADD
-            4'b0001: result = a - b;              // SUB
-            4'b0010: result = a & b;              // AND
-            // TODO: Complete rest of the ALU operations
+            4'b1111: result = a - b;              // SUB
+            4'b0001: result = a ^ b;              // AND            
+            4'b0010: result = a | b;
+            4'b0011: result = a & b;
+            4'b0100: result = {31'b0, a < b};    
+            4'b0101: result = a << (b[4:0]);
+            4'b0110: result = {31'b0, $unsigned(a) < $unsigned(b)};
+            4'b0111: result = a >> b[4:0];
+            4'b1000: result = a >>> b;
             default: result = 32'h0000_0000;
         endcase
     end
 
-    // TODO: Set 'zero' flag based on result
+
     assign zero = (result == 32'h0000_0000);
 
 endmodule
